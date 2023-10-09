@@ -1,0 +1,59 @@
+[gd_scene load_steps=9 format=3 uid="uid://csohhai35u8qw"]
+
+[ext_resource type="PackedScene" uid="uid://b4kad2kuba1yn" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/left_hand_low.tscn" id="1_j1ptu"]
+[ext_resource type="PackedScene" uid="uid://l2n30mpbkdyw" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/right_hand_low.tscn" id="2_yg7rc"]
+[ext_resource type="PackedScene" uid="uid://clc5dre31iskm" path="res://addons/godot-xr-tools/xr/start_xr.tscn" id="3_rxcei"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_jo0m0"]
+size = Vector2(10, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1qmhw"]
+size = Vector3(10, 1, 10)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_bhkue"]
+
+[sub_resource type="Sky" id="Sky_p2o8w"]
+sky_material = SubResource("ProceduralSkyMaterial_bhkue")
+
+[sub_resource type="Environment" id="Environment_qtxx7"]
+background_mode = 2
+sky = SubResource("Sky_p2o8w")
+
+[node name="Main" type="Node3D"]
+
+[node name="XROrigin3D" type="XROrigin3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0201797, 0)
+
+[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.78877, 0)
+
+[node name="LeftContoller" type="XRController3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.505152, 1.0053, 0)
+tracker = &"left_hand"
+pose = &"aim"
+
+[node name="LeftHand" parent="XROrigin3D/LeftContoller" instance=ExtResource("1_j1ptu")]
+
+[node name="RightController" type="XRController3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.51406, 1.00218, 0)
+tracker = &"right_hand"
+pose = &"aim"
+
+[node name="RightHand" parent="XROrigin3D/RightController" instance=ExtResource("2_yg7rc")]
+
+[node name="Ground" type="StaticBody3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("PlaneMesh_jo0m0")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.501529, 0)
+shape = SubResource("BoxShape3D_1qmhw")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.583499, 0.812114, 0, -0.812114, 0.583499, 0, 3.28329, 0)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_qtxx7")
+
+[node name="StartXR" parent="." instance=ExtResource("3_rxcei")]
